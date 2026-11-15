@@ -5,9 +5,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import accuracy_score
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
-
-data = pd.read_csv(url, sep=";")
+data = pd.read_csv("winequality-red.csv")
 
 X = data.drop("quality", axis=1)
 y = data["quality"]
@@ -22,16 +20,17 @@ architectures = [
     (32,),
     (16, 8),
     (32, 16),
-    (32, 16, 8),
+    (32, 16, 8)
 ]
 
 for architecture in architectures:
+
     model = make_pipeline(
         StandardScaler(),
         MLPClassifier(
             hidden_layer_sizes=architecture,
             activation="relu",
-            max_iter=1000,   #inc iteration if error
+            max_iter=3000,
             random_state=42
         )
     )
@@ -42,6 +41,6 @@ for architecture in architectures:
 
     accuracy = accuracy_score(y_test, y_pred)
 
-    print("Hidden Layers and Neurons:", architecture)
+    print("Architecture:", architecture)
     print("Accuracy:", accuracy)
     print()
